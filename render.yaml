@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: energy-game-backend
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm --prefix backend install && npm --prefix backend run build
+    startCommand: node backend/dist/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
