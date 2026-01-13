@@ -1,0 +1,275 @@
+.game-stats {
+  padding: 1.5rem;
+  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.stats-row:last-child {
+  margin-bottom: 0;
+}
+
+.stats-row-speed {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 0;
+}
+
+.stat-box {
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stat-box label {
+  font-size: 0.85rem;
+  color: #a0a0a0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-box .value {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #667eea;
+}
+
+.stat-box .value.normal {
+  color: #4ade80;
+}
+
+.stat-box .value.critical {
+  color: #f87171;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.stat-box.power {
+  grid-column: 1 / -1;
+}
+
+.power-bar {
+  width: 100%;
+  height: 24px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+}
+
+.required-bar {
+  width: 100%;
+  height: 10px;
+  background: rgba(0,0,0,0.35);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(120,120,140,0.15);
+  margin-bottom: 6px;
+}
+
+.required-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f59e0b, #f97316);
+}
+
+.required-text {
+  font-size: 0.85rem;
+  color: #a0a0a0;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.power-bar.deficit {
+  border-color: #f87171;
+}
+
+.power-bar.sufficient {
+  border-color: #4ade80;
+}
+
+.power-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  transition: width 0.3s ease;
+}
+
+.power-bar.deficit .power-fill {
+  background: linear-gradient(90deg, #f87171, #dc2626);
+}
+
+.power-bar.sufficient .power-fill {
+  background: linear-gradient(90deg, #4ade80, #22c55e);
+}
+
+.power-text {
+  font-size: 0.9rem;
+  color: #a0a0a0;
+  margin-top: 0.25rem;
+  text-align: center;
+}
+
+.start-box { display:flex; align-items:center; justify-content:center; }
+.restart-box { display:flex; align-items:center; justify-content:center; }
+.start-game-btn {
+  padding: 0.6rem 1rem;
+  background: linear-gradient(135deg,#10b981,#059669);
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.start-game-btn:hover { transform: translateY(-2px); }
+.restart-btn {
+  padding: 0.6rem 1rem;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.restart-btn:hover { transform: translateY(-2px); }
+.speed-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.speed-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.speed-buttons button {
+  padding: 0.5rem 0.75rem;
+  background: rgba(102, 126, 234, 0.2);
+  border: 1px solid rgba(102, 126, 234, 0.4);
+  color: #a0a0a0;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.speed-buttons button:hover {
+  background: rgba(102, 126, 234, 0.3);
+  border-color: rgba(102, 126, 234, 0.6);
+  color: #667eea;
+}
+
+.speed-buttons button.active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+
+.current-speed {
+  font-size: 0.85rem;
+  color: #667eea;
+  font-weight: bold;
+}
+
+.speed-box {
+  flex-shrink: 0;
+  width: fit-content !important;
+  padding: 0.75rem !important;
+}
+
+.speed-box label {
+  margin-bottom: 0.25rem;
+}
+
+.speed-buttons {
+  display: flex;
+  gap: 0.3rem;
+  margin-bottom: 0;
+}
+
+.speed-buttons button {
+  padding: 0.4rem 0.6rem !important;
+  font-size: 0.75rem !important;
+}
+
+.notifications-panel {
+  flex: 1;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 100px;
+}
+
+.notifications-panel label {
+  font-size: 0.85rem;
+  color: #a0a0a0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+  overflow-y: auto;
+  max-height: 80px;
+}
+
+.notification-item {
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  border-left: 3px solid;
+}
+
+.notification-item.notification-success {
+  background: rgba(76, 175, 80, 0.2);
+  border-left-color: #4caf50;
+  color: #81c784;
+}
+
+.notification-item.notification-warning {
+  background: rgba(255, 152, 0, 0.2);
+  border-left-color: #ff9800;
+  color: #ffb74d;
+}
+
+.notification-item.notification-info {
+  background: rgba(33, 150, 243, 0.2);
+  border-left-color: #2196f3;
+  color: #64b5f6;
+}
+
+.notification-item.empty {
+  color: #888;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}

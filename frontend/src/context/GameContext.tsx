@@ -54,7 +54,8 @@ interface GameContextType {
 
 const GameContext = createContext<GameContextType | undefined>(undefined)
 
-const API_URL = 'http://localhost:3000/api'
+// Use relative URL for both local dev and cloud deployment
+const API_URL = '/api'
 
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [gameState, setGameState] = useState<GameState>({

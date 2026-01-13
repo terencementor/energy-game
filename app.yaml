@@ -1,0 +1,20 @@
+name: energy-game
+runtime: nodejs18
+env: standard
+entrypoint: node backend/dist/index.js
+
+env_variables:
+  PORT: "3000"
+
+automatic_scaling:
+  min_instances: 1
+  max_instances: 10
+
+handlers:
+- url: /api/*
+  script: auto
+  secure: always
+
+- url: /.*
+  static_dir: frontend/dist
+  secure: always

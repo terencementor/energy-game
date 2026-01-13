@@ -1,0 +1,26 @@
+directories:
+  output: dist
+  buildResources: build
+appId: com.energygame.app
+productName: Energy Game
+files:
+  - filter:
+      - main.js
+      - preload.js
+      - backend/dist/**/*
+      - backend/package*.json
+      - frontend/dist/**/*
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+    - target: portable
+      arch:
+        - x64
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+electronVersion: 39.2.7

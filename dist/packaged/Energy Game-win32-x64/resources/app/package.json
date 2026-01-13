@@ -1,0 +1,54 @@
+{
+  "name": "energy-game",
+  "version": "1.0.0",
+  "description": "Real-time Economy Simulation Game",
+  "main": "main.js",
+  "homepage": "./",
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "dev": "electron .",
+    "build": "npm --prefix backend run build && npm --prefix frontend run build && electron-packager . \"Energy Game\" --platform=win32 --arch=x64 --out=dist/packaged --overwrite --icon=icon.ico --prune=false --deref-symlinks=true --no-asar",
+    "build-frontend": "npm --prefix frontend run build",
+    "build-backend": "npm --prefix backend run build"
+  },
+  "devDependencies": {
+    "electron": "^39.2.7",
+    "electron-builder": "^26.4.0",
+    "electron-is-dev": "^3.0.1",
+    "electron-packager": "^17.1.2"
+  },
+  "build": {
+    "appId": "com.energygame.app",
+    "productName": "Energy Game",
+    "files": [
+      "main.js",
+      "preload.js",
+      "backend/dist/**/*",
+      "backend/package*.json",
+      "frontend/dist/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}

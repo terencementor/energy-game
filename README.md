@@ -1,52 +1,110 @@
-# Energy Game - Web-based Economy Simulation
+# Energy Game - 30-Day Energy Management Simulator
 
-A real-time economy simulation game built with React and Node.js where players manage resources, production chains, and market dynamics.
+A real-time 30-day energy management simulation where you balance power production, costs, population growth, and environmental impact. Built with React and Node.js.
 
-## Project Structure
+## 🚀 READY TO DEPLOY? START HERE!
 
+**Your game is fully built and ready for the cloud in 5 minutes!**
+
+👉 **See [START_HERE.md](START_HERE.md)** for next steps
+
+Or jump straight to [DEPLOY_COMMANDS.md](DEPLOY_COMMANDS.md) for copy-paste ready commands.
+
+## 🎮 Play Online Now
+
+**No installation needed!**
+
+Deploy to Vercel in 5 minutes → Get a shareable URL → Share with your team
+
+See [Deployment Guide](#-deploy-to-cloud) below
+
+## Game Overview
+
+Manage 7 different energy sources (Engine, Turbine, Solar, Wind, Coal, Nuclear, Battery) to meet power demand across a 30-day cycle. Balance cost, reliability, and environmental impact.
+
+### Key Features
+
+- 🏭 **7 Energy Unit Types** with different costs, outputs, and ramp speeds
+- 💰 **Real Economy**: Power deficits cost money, meeting demand earns income
+- 📈 **Population Growth**: Affects demand and income every 5 days
+- 🔋 **Battery Storage**: Unlocks Day 10, stores excess power for emergencies
+- 🌓 **Day/Night Cycles**: Solar output varies by time of day
+- ⚡ **Speed Controls**: Play at 0.5x, 1x, 2x, or 4x speed
+- 📊 **Notifications**: Track important economic and technical events
+- 🎯 **30-Day Campaign**: Complete challenges across a full month cycle
+
+## 🚀 Deploy to Cloud (Free - 5 Minutes)
+
+### Option A: GitHub + Vercel (Recommended)
+
+1. **Create GitHub account** (free at https://github.com)
+
+2. **Push to GitHub**
+   ```bash
+   git init
+   git add .
+   git commit -m "Initial commit"
+   git branch -M main
+   git remote add origin https://github.com/YOUR-USERNAME/energy-game.git
+   git push -u origin main
+   ```
+
+3. **Deploy to Vercel**
+   - Go to https://vercel.com (free account)
+   - Click "New Project"
+   - Select your GitHub repository
+   - Click "Deploy"
+   - Get instant live URL!
+
+4. **Share with Team**
+   - Copy the URL Vercel gives you
+   - Send it to team members
+   - They click and play immediately
+
+### Option B: Vercel CLI (Fastest)
+
+```bash
+npm install -g vercel
+vercel
 ```
-energy-game/
-├── frontend/          # React + TypeScript + Vite
-├── backend/           # Node.js + Express + TypeScript
-└── .github/
-    └── copilot-instructions.md
-```
 
-## Tech Stack
-
-- **Frontend**: React 18, TypeScript, Vite
-- **Backend**: Node.js, Express, TypeScript
-- **Database**: SQLite (development)
-- **State Management**: React Context API
-
-## Quick Start
+## 💻 Run Locally
 
 ### Prerequisites
-- Node.js 16+ 
-- npm or yarn
+- Node.js 16+ (https://nodejs.org/)
 
-### Installation
+### Setup
 
 ```bash
-# Install frontend dependencies
-cd frontend
+# Install all dependencies
 npm install
+npm --prefix backend install
+npm --prefix frontend install
 
-# Install backend dependencies
-cd ../backend
-npm install
+# Build for production
+npm run build-vercel
+
+# Start server
+npm start
 ```
 
-### Development
+Runs at: http://localhost:3000
 
-In two separate terminals:
+### Development Mode
 
+Terminal 1 - Backend:
 ```bash
-# Terminal 1: Start frontend dev server
+cd backend
+npm run dev
+```
+
+Terminal 2 - Frontend:
+```bash
 cd frontend
 npm run dev
-# Runs on http://localhost:5173
 ```
+
+Frontend runs at http://localhost:5173, Backend at http://localhost:3000
 
 ```bash
 # Terminal 2: Start backend server
@@ -58,6 +116,194 @@ npm run dev
 ### Building for Production
 
 ```bash
+npm run build-vercel
+```
+
+## 📊 Game Mechanics
+
+### Energy Units
+
+| Unit | Cost/MW | Output | Ramp Speed | Notes |
+|------|---------|--------|-----------|-------|
+| **Engine** | Very High | Fast | Instant | Most expensive, fastest response |
+| **Turbine** | Medium | Medium | Instant | Reliable baseline power |
+| **Solar** | Free | Variable | Instant | Only works 8am-6pm, weather dependent |
+| **Wind** | Low | Medium | Instant | Renewable, variable |
+| **Coal** | Low | High | Slow | High pollution, ramps down over time |
+| **Nuclear** | Medium | High | Slow | Efficient, constant output |
+| **Battery** | High | Variable | Instant | Storage only (unlocks Day 10) |
+
+### Economy System
+
+- **Starting Budget**: 15,000,000 credits
+- **Power Deficit Penalty** (Day 5+): 10,000 credits per MW short
+- **Income** (Day 5+): 0.5 × population credits/hour (when demand is met)
+- **Population Growth**: +10% every 5 days (increases demand)
+- **Battery Unlock**: Day 10 (allows storing excess power)
+
+### Battery Storage
+
+- **Charge Rate**: 10%/hour (when producing 1+ MW excess)
+- **Discharge Rate**: Scales with demand (up to 25%/hour at max)
+- **Purpose**: Emergency power during deficits
+- **Unlock Condition**: Day 10
+
+### Game Cycle
+
+- **Game Speed**: 1 hour = 5 seconds (configurable with speed controls)
+- **Game Duration**: 30 days
+- **Day/Night**: 24-hour cycle with solar output varying 8am-6pm
+- **Time Compression**: Can play full game in ~25 minutes
+
+## 📁 Project Structure
+
+```
+energy-game/
+├── frontend/                    # React + TypeScript + Vite
+│   ├── src/
+│   │   ├── components/         # UI components (GameBoard, etc)
+│   │   ├── context/            # GameContext state management
+│   │   ├── App.tsx             # Main app
+│   │   └── main.tsx            # Entry point
+│   ├── dist/                   # Production build (created by npm run build)
+│   └── package.json
+├── backend/                     # Node.js + Express + TypeScript
+│   ├── src/
+│   │   ├── models/
+│   │   │   └── Game.ts         # Core game engine & logic
+│   │   ├── routes/
+│   │   │   └── game.ts         # API endpoints (/api/game/*)
+│   │   └── index.ts            # Express server & static file serving
+│   ├── dist/                   # Compiled JavaScript
+│   │   └── public/             # Frontend build (copied during deploy)
+│   └── package.json
+├── package.json                # Root scripts
+├── vercel.json                 # Vercel deployment config
+├── RUN_GAME.bat               # Windows launcher (for local testing)
+├── DEPLOY_TO_VERCEL.md        # Detailed deployment guide
+└── README.md                   # This file
+```
+
+## 📋 NPM Scripts
+
+| Script | Purpose |
+|--------|---------|
+| `npm install` | Install all dependencies |
+| `npm run dev` | Run entire app in dev mode (both frontend & backend) |
+| `npm run build-frontend` | Build frontend for production (Vite) |
+| `npm run build-backend` | Compile TypeScript backend to JavaScript |
+| `npm run build-vercel` | Complete production build (frontend + backend) |
+| `npm start` | Run production server (after building) |
+| `npm run copy-frontend` | Copy built frontend to backend public folder |
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React 18, TypeScript, Vite, CSS3
+- **Backend**: Node.js, Express 4, TypeScript
+- **Database**: SQLite3 (development only)
+- **State Management**: React Context API
+- **Deployment**: Vercel (serverless)
+- **Hosting**: GitHub (code repository)
+
+## 📚 Additional Resources
+
+- [Vercel Deployment Guide](DEPLOY_TO_VERCEL.md) - Detailed step-by-step
+- [Backend Development](backend/README.md) - Server & API docs
+- [Frontend Development](frontend/README.md) - UI & components docs
+
+## 🐛 Troubleshooting
+
+### "Port 3000 already in use"
+```bash
+# Windows - kill node process
+taskkill /F /IM node.exe
+```
+
+### "Cannot find module"
+```bash
+# Reinstall all dependencies
+npm install
+npm --prefix backend install
+npm --prefix frontend install
+```
+
+### Game shows blank page
+- Wait 5 seconds for initial load
+- Check browser console (F12) for errors
+- Verify `npm run build-vercel` completes successfully
+- Try `npm start` and navigate to http://localhost:3000
+
+### Deployment fails on Vercel
+- Check build logs on Vercel dashboard
+- Verify `npm run build-vercel` succeeds locally
+- Make sure `.gitignore` doesn't exclude needed files
+- Ensure `backend/src/index.ts` properly serves frontend from `public/`
+
+## 🎮 Gameplay Tips
+
+1. **Early Game (Days 1-4)**
+   - Build Turbine units for reliable baseline
+   - Use Solar during day hours
+   - Don't overspend - penalties start Day 5
+
+2. **Mid Game (Days 5-9)**
+   - Monitor power deficit penalties
+   - Watch population growth every 5 days
+   - Start planning for battery unlock
+
+3. **Late Game (Days 10-30)**
+   - Unlock and use Battery storage
+   - Phase out Coal (ramps down)
+   - Maximize renewable energy
+   - Manage population income efficiently
+
+## 📝 Game Calculations
+
+**Population Income per Hour:**
+```
+Income = 0.5 × current_population (in millions)
+```
+
+**Power Deficit Cost per Hour:**
+```
+Penalty = 10,000 credits × MW_short
+```
+
+**Battery Charge Efficiency:**
+```
+Charge_rate = 10% per hour (requires 1+ MW excess)
+Discharge_rate = scales with demand
+```
+
+## 🤝 Contributing
+
+Have ideas for improvements?
+- Suggest new energy types
+- Balance adjustments
+- UI enhancements
+- New game modes
+
+## 📄 License
+
+This project is provided as-is for educational and entertainment purposes.
+
+## 🚀 Let's Go!
+
+Ready to deploy?
+
+```bash
+# Option 1: Deploy to Vercel (Recommended)
+# Follow steps in "Deploy to Cloud" section above
+
+# Option 2: Run locally
+npm install && npm run build-vercel && npm start
+# Then visit http://localhost:3000
+```
+
+---
+
+**Questions?** Check the [Deployment Guide](DEPLOY_TO_VERCEL.md) or test locally first with `npm start`.
+```
 # Build frontend
 cd frontend
 npm run build

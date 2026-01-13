@@ -69,4 +69,26 @@ router.post('/update', (req, res) => {
     game.update();
     res.json(game.getState());
 });
+// Set game speed
+router.post('/set-speed', (req, res) => {
+    const gameId = req.body.gameId || 'default';
+    const { speed } = req.body;
+    const game = games[gameId];
+    if (!game) {
+        return res.status(404).json({ error: 'Game not found' });
+    }
+    game.setGameSpeed(speed);
+    res.json({ success: true, state: game.getState() });
+});
+// Restart game
+router.post('/restart', (req, res) => {
+    const gameId = req.body.gameId || 'default';
+    let game = games[gameId];
+    if (!game) {
+        game = new Game(gameId);
+        games[gameId] = game;
+    }
+    game.restartGame();
+    res.json({ success: true, state: game.getState() });
+});
 export default router;

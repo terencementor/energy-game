@@ -1,0 +1,13 @@
+node_modulesdist/
+*.log
+.env
+.env.local
+.DS_Store
+Thumbs.db
+backend/dist/
+frontend/dist/
+.vscode/settings.json
+test-exe.exe
+*.exe
+.vercel/
+node_modules

@@ -1,6 +1,12 @@
 import express, { Express } from 'express'
 import cors from 'cors'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import fs from 'fs'
 import gameRoutes from './routes/game.js'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const app: Express = express()
 const PORT = process.env.PORT || 3000
@@ -8,6 +14,16 @@ const PORT = process.env.PORT || 3000
 // Middleware
 app.use(cors())
 app.use(express.json())
+
+// Serve frontend static files - check multiple paths
+const publicPath = path.join(__dirname, 'public')
+const distPath = path.join(__dirname, '../../frontend/dist')
+
+if (fs.existsSync(publicPath)) {
+  app.use(express.static(publicPath))
+} else if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath))
+}
 
 // Routes
 app.use('/api/game', gameRoutes)
@@ -17,7 +33,14 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
+// Serve index.html for all non-API routes (SPA routing)
+app.get('*', (req, res) => {
+  const indexPath = path.join(publicPath || distPath, 'index.html')
+  res.sendFile(indexPath, { root: '/' })
+})
+
 // Start server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`)
 })
+
