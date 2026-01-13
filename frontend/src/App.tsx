@@ -1,5 +1,6 @@
 import { GameProvider } from './context/GameContext'
 import GameBoard from './components/GameBoard'
+import Notifications from './components/Notifications'
 import './App.css'
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
           <p>Real-time Economy Simulation</p>
         </header>
         <GameBoard />
+        <Notifications />
       </div>
     </GameProvider>
   )

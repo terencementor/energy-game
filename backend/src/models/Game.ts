@@ -9,7 +9,7 @@ export interface EnergyUnitType {
   carbonDioxidePerHour: number
   minMw: number
   maxMw: number
-  availableHours?: [number, number] // [start, end] for solar (8, 17)
+  availableHours?: [number, number] // [start, end) for solar (8, 18) = 8am to 6pm
   unpredictable?: boolean
   isBattery?: boolean
 }
@@ -37,6 +37,7 @@ export interface GameState {
   powerRequired: number
   powerGenerated: number
   carbonDioxideTotal: number
+  notifications: Array<{ id: string; message: string; type: 'info' | 'warning' | 'success'; timestamp: number }>
   createdAt: Date
   updatedAt: Date
 }
@@ -126,6 +127,10 @@ const ENERGY_UNIT_TYPES: Record<string, EnergyUnitType> = {
 
 export class Game {
   private state: GameState
+  private lastPopulation: number = 0
+  private lastDay: number = -1
+  private batteryNotificationShown: boolean = false
+  private lastCredits: number = 15000000
 
   constructor(id: string = 'default') {
     this.state = {
@@ -140,6 +145,7 @@ export class Game {
       powerRequired: 0,
       powerGenerated: 0,
       carbonDioxideTotal: 0,
+      notifications: [],
       createdAt: new Date(),
       updatedAt: new Date(),
     }
@@ -165,9 +171,14 @@ export class Game {
       powerRequired: 0,
       powerGenerated: 0,
       carbonDioxideTotal: 0,
+      notifications: [],
       createdAt: new Date(),
       updatedAt: new Date(),
     }
+    this.lastPopulation = 0
+    this.lastDay = -1
+    this.batteryNotificationShown = false
+    this.lastCredits = 15000000
     this.calculatePowerRequired()
   }
 
@@ -179,6 +190,20 @@ export class Game {
 
   getState(): GameState {
     return this.state
+  }
+
+  private addNotification(message: string, type: 'info' | 'warning' | 'success'): void {
+    const notification = {
+      id: `${Date.now()}-${Math.random()}`,
+      message,
+      type,
+      timestamp: Date.now(),
+    }
+    this.state.notifications.push(notification)
+    // Keep only last 10 notifications
+    if (this.state.notifications.length > 10) {
+      this.state.notifications.shift()
+    }
   }
 
   getEnergyUnitTypes(): EnergyUnitType[] {
@@ -385,15 +410,25 @@ export class Game {
       }
     })
 
-    // Battery charging: charge when there's excess power and battery is not being used
+    // Battery charging: distribute excess power across all stopped batteries
+    // Each battery needs 1MW of excess power to charge at 10% per hour
     const excessPower = Math.max(0, this.state.powerGenerated - this.state.powerRequired)
-    if (excessPower > 0) {
-      this.state.energyUnits.forEach((unit) => {
-        const unitType = ENERGY_UNIT_TYPES[unit.typeId]
-        if (unitType.isBattery && unit.chargePercent !== undefined && unit.chargePercent < 100) {
-          // Charge rate: 10% per hour with excess power (arbitrary rate for game balance)
-          unit.chargePercent = Math.min(100, unit.chargePercent + 10)
-        }
+    
+    // Find all stopped batteries that can be charged
+    const batteriesToCharge = this.state.energyUnits.filter((unit) => {
+      const unitType = ENERGY_UNIT_TYPES[unit.typeId]
+      return unitType.isBattery && !unit.isRunning && unit.chargePercent !== undefined && unit.chargePercent < 100
+    })
+    
+    if (batteriesToCharge.length > 0 && excessPower >= batteriesToCharge.length) {
+      // Distribute excess power evenly across all batteries that need charging
+      const powerPerBattery = excessPower / batteriesToCharge.length
+      // Charge rate: 10% per hour per MW of excess power allocated
+      const chargeRatePerMw = 10
+      
+      batteriesToCharge.forEach((unit) => {
+        const chargeIncrease = (powerPerBattery / 1) * chargeRatePerMw // 1MW base for 10% per hour
+        unit.chargePercent = Math.min(100, unit.chargePercent! + chargeIncrease)
       })
     }
 
@@ -413,6 +448,43 @@ export class Game {
       // Grant 0.5 × population credits per hour
       this.state.credits += population * 0.5
     }
+
+    // Notification tracking
+    const currentPopulation = 10000 + Math.floor(this.state.currentDay / 5) * 1000
+    
+    // Check for population increase
+    if (currentPopulation > this.lastPopulation) {
+      this.addNotification(`Population increased to ${currentPopulation}`, 'success')
+      this.lastPopulation = currentPopulation
+    }
+    
+    // Check for battery availability (Day 10)
+    if (this.state.currentDay === 10 && !this.batteryNotificationShown) {
+      this.addNotification('Batteries are now available!', 'info')
+      this.batteryNotificationShown = true
+    }
+    
+    // Check for power deficit fines
+    if (this.state.powerGenerated < this.state.powerRequired && this.state.currentDay >= 5) {
+      const shortage = this.state.powerRequired - this.state.powerGenerated
+      const fine = shortage * 10000
+      if (this.state.credits < this.lastCredits) {
+        this.addNotification(`Fine deducted: -₹${fine.toLocaleString()} (power deficit)`, 'warning')
+      }
+    }
+    
+    // Check for population income
+    if (this.state.currentDay >= 5 && this.state.powerGenerated >= this.state.powerRequired) {
+      const basePopulation = 10000
+      const populationIncrease = Math.floor(this.state.currentDay / 5) * 1000
+      const population = basePopulation + populationIncrease
+      const income = population * 0.5
+      if (this.state.credits > this.lastCredits) {
+        this.addNotification(`Income added: +₹${income.toLocaleString()} (population)`, 'success')
+      }
+    }
+    
+    this.lastCredits = this.state.credits
 
     this.state.updatedAt = new Date()
   }

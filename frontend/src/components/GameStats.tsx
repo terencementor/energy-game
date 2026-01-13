@@ -84,8 +84,8 @@ const GameStats: React.FC = () => {
         </div>
       </div>
 
-      <div className="stats-row">
-        <div className="stat-box">
+      <div className="stats-row stats-row-speed">
+        <div className="stat-box speed-box">
           <label>Game Speed</label>
           <div className="speed-buttons">
             <button onClick={() => setSpeed(0.5)} className={gameState.gameSpeed === 0.5 ? 'active' : ''}>0.5x</button>
@@ -93,7 +93,20 @@ const GameStats: React.FC = () => {
             <button onClick={() => setSpeed(2)} className={gameState.gameSpeed === 2 ? 'active' : ''}>2x</button>
             <button onClick={() => setSpeed(4)} className={gameState.gameSpeed === 4 ? 'active' : ''}>4x</button>
           </div>
-          <div className="current-speed">Current: {gameState.gameSpeed}x</div>
+        </div>
+        <div className="notifications-panel">
+          <label>Notifications</label>
+          <div className="notifications-list">
+            {gameState.notifications && gameState.notifications.length > 0 ? (
+              gameState.notifications.slice(-3).reverse().map((notif) => (
+                <div key={notif.id} className={`notification-item notification-${notif.type}`}>
+                  {notif.message}
+                </div>
+              ))
+            ) : (
+              <div className="notification-item empty">No notifications</div>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -38,6 +38,7 @@ export interface GameState {
   powerRequired: number
   powerGenerated: number
   carbonDioxideTotal: number
+  notifications: Array<{ id: string; message: string; type: 'info' | 'warning' | 'success'; timestamp: number }>
 }
 
 interface GameContextType {

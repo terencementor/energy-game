@@ -9,7 +9,7 @@ const UnitMarket: React.FC = () => {
   const categories = [
     { id: 'fossil', name: 'Fossil Fuels', types: ['engine', 'turbine', 'coal'] },
     { id: 'renewable', name: 'Renewable', types: ['solar', 'wind'] },
-    { id: 'advanced', name: 'Advanced', types: ['nuclear'] },
+    { id: 'advanced', name: 'Advanced', types: ['nuclear', 'battery'] },
   ]
 
   const getCategory = (typeId: string) => {
