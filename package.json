@@ -15,7 +15,7 @@
     "build-exe": "npm --prefix backend run build && npm --prefix frontend run build && pkg server.js --compress Brotli --targets node18-win-x64 --output dist/Energy-Game.exe",
     "build-vercel": "npm --prefix backend run build && npm --prefix frontend run build && npm run copy-frontend",
     "copy-frontend": "node -e \"const fs = require('fs'); const path = require('path'); const src = 'frontend/dist'; const dst = 'backend/dist/public'; if (!fs.existsSync(dst)) fs.mkdirSync(dst, {recursive: true}); fs.cpSync(src, dst, {recursive: true});\"",
-    "start": "node backend/dist/index.js"
+    "start": "node server.js"
   },
   "devDependencies": {
     "electron": "^39.2.7",
