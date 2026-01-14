@@ -1,6 +1,5 @@
 {
   "buildCommand": "npm --prefix frontend run build",
-  "public": "frontend/dist",
   "env": {
     "NODE_ENV": "production"
   }
