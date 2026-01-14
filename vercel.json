@@ -1,4 +1,0 @@
-{
-  "buildCommand": "echo 'Using pre-built frontend'",
-  "outputDirectory": "public"
-}
