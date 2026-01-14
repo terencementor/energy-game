@@ -1,6 +1,6 @@
-import { Router } from 'express';
+import express from 'express';
 import { Game } from '../models/Game.js';
-const router = Router();
+const router = express.Router();
 // In-memory game instance
 const games = {
     default: new Game('default'),

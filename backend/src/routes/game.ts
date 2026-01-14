@@ -1,7 +1,7 @@
-import express, { Router, Request, Response } from 'express'
+import express from 'express'
 import { Game } from '../models/Game.js'
 
-const router = Router()
+const router = express.Router()
 
 // In-memory game instance
 const games: Record<string, Game> = {
@@ -9,7 +9,7 @@ const games: Record<string, Game> = {
 }
 
 // Get game state
-router.get('/state', (req: Request, res: Response) => {
+router.get('/state', (req: any, res: any) => {
   const gameId = (req.query.gameId as string) || 'default'
   const game = games[gameId]
 
@@ -21,7 +21,7 @@ router.get('/state', (req: Request, res: Response) => {
 })
 
 // Get available energy unit types
-router.get('/units', (req: Request, res: Response) => {
+router.get('/units', (req: any, res: any) => {
   const gameId = (req.query.gameId as string) || 'default'
   let game = games[gameId]
 
@@ -34,7 +34,7 @@ router.get('/units', (req: Request, res: Response) => {
 })
 
 // Buy energy unit
-router.post('/buy-unit', (req: Request, res: Response) => {
+router.post('/buy-unit', (req: any, res: any) => {
   const gameId = (req.body.gameId as string) || 'default'
   const { typeId } = req.body
 
@@ -49,7 +49,7 @@ router.post('/buy-unit', (req: Request, res: Response) => {
 })
 
 // Toggle unit on/off
-router.post('/toggle-unit', (req: Request, res: Response) => {
+router.post('/toggle-unit', (req: any, res: any) => {
   const gameId = (req.body.gameId as string) || 'default'
   const { unitId } = req.body
 
@@ -63,7 +63,7 @@ router.post('/toggle-unit', (req: Request, res: Response) => {
 })
 
 // Start game (enable ticking)
-router.post('/start', (req: Request, res: Response) => {
+router.post('/start', (req: any, res: any) => {
   const gameId = (req.body.gameId as string) || 'default'
   let game = games[gameId]
 
@@ -77,7 +77,7 @@ router.post('/start', (req: Request, res: Response) => {
 })
 
 // Update game tick
-router.post('/update', (req: Request, res: Response) => {
+router.post('/update', (req: any, res: any) => {
   const gameId = (req.body.gameId as string) || 'default'
   let game = games[gameId]
 
@@ -91,7 +91,7 @@ router.post('/update', (req: Request, res: Response) => {
 })
 
 // Set game speed
-router.post('/set-speed', (req: Request, res: Response) => {
+router.post('/set-speed', (req: any, res: any) => {
   const gameId = (req.body.gameId as string) || 'default'
   const { speed } = req.body
 
@@ -105,7 +105,7 @@ router.post('/set-speed', (req: Request, res: Response) => {
 })
 
 // Restart game
-router.post('/restart', (req: Request, res: Response) => {
+router.post('/restart', (req: any, res: any) => {
   const gameId = (req.body.gameId as string) || 'default'
   let game = games[gameId]
 

@@ -1,4 +1,4 @@
-import express, { Express } from 'express'
+import express from 'express'
 import cors from 'cors'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -8,7 +8,7 @@ import gameRoutes from './routes/game.js'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const app: Express = express()
+const app: any = express()
 const PORT = process.env.PORT || 3000
 
 // Middleware
@@ -29,7 +29,7 @@ if (fs.existsSync(publicPath)) {
 app.use('/api/game', gameRoutes)
 
 // Health check
-app.get('/api/health', (req, res) => {
+app.get('/api/health', (req: any, res: any) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
