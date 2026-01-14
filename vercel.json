@@ -1,17 +1,7 @@
 {
-  "buildCommand": "npm run build-vercel",
-  "outputDirectory": "backend/dist",
+  "buildCommand": "npm --prefix frontend run build",
+  "outputDirectory": "frontend/dist",
   "env": {
     "NODE_ENV": "production"
-  },
-  "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "/index.js"
-    },
-    {
-      "source": "/:path*",
-      "destination": "/index.js"
-    }
-  ]
+  }
 }
