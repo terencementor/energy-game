@@ -1,3 +1,4 @@
+/// <reference path="../declarations.d.ts" />
 import express from 'express'
 import { Game } from '../models/Game.js'
 
