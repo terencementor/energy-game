@@ -1,4 +1,5 @@
 {
+  "buildCommand": "echo 'Using pre-built frontend'",
   "env": {
     "NODE_ENV": "production"
   }
