@@ -22,18 +22,17 @@ function getOrCreateGame(gameId = 'default') {
   return games[gameId]
 }
 
-export default function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Credentials', 'true')
+module.exports = (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
-  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token,X-Requested-With,Accept,Accept-Version,Content-Length,Content-MD5,Content-Type,Date,X-Api-Version')
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
 
   if (req.method === 'OPTIONS') {
     res.status(200).end()
     return
   }
 
-  const pathname = new URL(req.url, `http://${req.headers.host}`).pathname
+  const pathname = req.url.split('?')[0]
 
   try {
     if (pathname === '/api/health') {
@@ -41,7 +40,7 @@ export default function handler(req, res) {
     }
 
     if (pathname === '/api/game/state') {
-      const gameId = req.query?.gameId || 'default'
+      const gameId = (req.query && req.query.gameId) || 'default'
       const game = getOrCreateGame(gameId)
       return res.json(game)
     }
@@ -59,39 +58,39 @@ export default function handler(req, res) {
     }
 
     if (pathname === '/api/game/buy-unit') {
-      const gameId = req.body?.gameId || 'default'
+      const gameId = (req.body && req.body.gameId) || 'default'
       const game = getOrCreateGame(gameId)
       return res.json({ success: true, state: game })
     }
 
     if (pathname === '/api/game/toggle-unit') {
-      const gameId = req.body?.gameId || 'default'
+      const gameId = (req.body && req.body.gameId) || 'default'
       const game = getOrCreateGame(gameId)
       return res.json({ success: true, state: game })
     }
 
     if (pathname === '/api/game/start') {
-      const gameId = req.body?.gameId || 'default'
+      const gameId = (req.body && req.body.gameId) || 'default'
       const game = getOrCreateGame(gameId)
       game.gameActive = true
       return res.json({ success: true, state: game })
     }
 
     if (pathname === '/api/game/update') {
-      const gameId = req.body?.gameId || 'default'
+      const gameId = (req.body && req.body.gameId) || 'default'
       const game = getOrCreateGame(gameId)
       return res.json(game)
     }
 
     if (pathname === '/api/game/set-speed') {
-      const gameId = req.body?.gameId || 'default'
+      const gameId = (req.body && req.body.gameId) || 'default'
       const game = getOrCreateGame(gameId)
-      game.gameSpeed = req.body?.speed || 1
+      game.gameSpeed = (req.body && req.body.speed) || 1
       return res.json({ success: true, state: game })
     }
 
     if (pathname === '/api/game/restart') {
-      const gameId = req.body?.gameId || 'default'
+      const gameId = (req.body && req.body.gameId) || 'default'
       games[gameId] = getOrCreateGame(gameId)
       return res.json({ success: true, state: games[gameId] })
     }
@@ -99,7 +98,7 @@ export default function handler(req, res) {
     res.status(404).json({ error: 'Not found' })
   } catch (error) {
     console.error(error)
-    res.status(500).json({ error: error.message || 'Internal server error' })
+    res.status(500).json({ error: error.message || 'Server error' })
   }
 }
 
