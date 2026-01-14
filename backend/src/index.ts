@@ -34,7 +34,7 @@ app.get('/api/health', (req: any, res: any) => {
 })
 
 // Serve index.html for all non-API routes (SPA routing)
-app.get('*', (req, res) => {
+app.get('*', (req: any, res: any) => {
   const indexPath = path.join(publicPath || distPath, 'index.html')
   res.sendFile(indexPath, { root: '/' })
 })
